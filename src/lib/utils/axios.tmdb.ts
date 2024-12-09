@@ -1,0 +1,30 @@
+import axios from "axios"
+
+const tmdbClient = axios.create({
+  baseURL: "https://api.themoviedb.org/3",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+
+tmdbClient.interceptors.request.use(
+  (config) => {
+    const token = process.env.TMDB_ACCESS_TOKEN
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
+tmdbClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API Error:", error.response || error.message)
+    return Promise.reject(error)
+  }
+)
+
+export default tmdbClient

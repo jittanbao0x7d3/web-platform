@@ -1,43 +1,23 @@
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { FaStar } from "react-icons/fa"
 import { SearchBar } from "@/components/SearchBar"
-
-const dummyMovies = [
-  {
-    id: 1,
-    title: "The Epic Journey",
-    releaseYear: 2024,
-    rating: 4.5,
-    genres: ["Action", "Adventure"],
-    synopsis: "An epic tale of adventure and discovery across unknown lands.",
-    posterUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1",
-    releaseDate: "2024-03-15",
-  },
-  {
-    id: 2,
-    title: "Midnight Mystery",
-    releaseYear: 2024,
-    rating: 4.8,
-    genres: ["Thriller", "Mystery"],
-    synopsis: "A gripping mystery unfolds in the dark streets of a sleeping city.",
-    posterUrl: "https://images.unsplash.com/photo-1535016120720-40c646be5580",
-    releaseDate: "2024-02-28",
-  },
-  {
-    id: 3,
-    title: "Love in Paris",
-    releaseYear: 2024,
-    rating: 4.2,
-    genres: ["Romance", "Drama"],
-    synopsis: "A romantic tale set in the heart of the city of love.",
-    posterUrl: "https://images.unsplash.com/photo-1502899576159-f224dc2349fa",
-    releaseDate: "2024-01-20",
-  },
-]
+import tmdbClient from "@/lib/utils/axios.tmdb"
 
 const MovieApp = () => {
-  const [movies] = useState<any>(dummyMovies)
+  const query = useQuery<any, any, { page: number; results: any[] }>({
+    queryKey: ["MOVIE_LIST"],
+    queryFn: () => {
+      return tmdbClient.get("/movie/popular", {
+        params: {
+          page: 1,
+          language: "vi-VN",
+        },
+      })
+    },
+  })
+
   const [filter, setFilter] = useState<string>("today")
 
   return (
@@ -64,9 +44,7 @@ const MovieApp = () => {
           </button>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
+          {query.data?.results?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
         </div>
       </div>
     </div>
@@ -75,7 +53,7 @@ const MovieApp = () => {
 
 export default MovieApp
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie }: any) => {
   const router = useRouter()
 
   return (
