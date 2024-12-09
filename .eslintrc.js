@@ -9,6 +9,7 @@ module.exports = {
     },
   },
   rules: {
+    "@typescript-eslint/no-explicit-any": "off",
     "tailwindcss/no-custom-classname": "off",
     "testing-library/prefer-screen-queries": "off",
     "@next/next/no-html-link-for-pages": "off",
