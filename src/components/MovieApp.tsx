@@ -3,18 +3,20 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { FaStar } from "react-icons/fa"
 import { SearchBar } from "@/components/SearchBar"
-import tmdbClient from "@/lib/utils/axios.tmdb"
+import tmdbClient, { baseImageUri } from "@/lib/utils/axios.tmdb"
 
 const MovieApp = () => {
   const query = useQuery<any, any, { page: number; results: any[] }>({
     queryKey: ["MOVIE_LIST"],
     queryFn: () => {
-      return tmdbClient.get("/movie/popular", {
-        params: {
-          page: 1,
-          language: "vi-VN",
-        },
-      })
+      return tmdbClient
+        .get("/movie/popular", {
+          params: {
+            page: 1,
+            language: "vi-VN",
+          },
+        })
+        .then((data) => data.data)
     },
   })
 
@@ -58,7 +60,7 @@ const MovieCard = ({ movie }: any) => {
 
   return (
     <div className="overflow-hidden rounded-lg bg-gray-800 shadow-lg transition-transform duration-200 hover:scale-105">
-      <img src={movie.posterUrl} alt={movie.title} className="h-64 w-full object-cover" />
+      <img src={baseImageUri + movie.backdrop_path} alt={movie.title} className="h-64 w-full object-cover" />
       <div className="p-4">
         <h3 className="mb-2 text-xl font-bold text-white">{movie.title}</h3>
         <p className="mb-2 text-gray-400">{movie.releaseYear}</p>
