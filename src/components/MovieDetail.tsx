@@ -1,37 +1,10 @@
 "use client"
 import { useRouter } from "next/navigation"
-import * as React from "react"
+import React from "react"
 import { FaArrowLeft, FaCalendarAlt, FaStar } from "react-icons/fa"
 
-type Props = {
-  isLoading: boolean
-  error?: string
-
-  movie: any
-  similar: any
-}
-
-export function MovieDetail({ isLoading, error, movie, similar }: Props) {
+export function MovieDetail({ movie, similar }) {
   const router = useRouter()
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-900">
-        <div className="size-32 animate-spin rounded-full border-b-2 border-blue-500"></div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-900 p-6">
-        <div className="text-center text-white">
-          <p className="mb-4 text-xl">{error}</p>
-          <button className="rounded-md bg-blue-600 px-4 py-2 hover:bg-blue-700">Back to Movies</button>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gray-900 p-6">
@@ -83,6 +56,7 @@ export function MovieDetail({ isLoading, error, movie, similar }: Props) {
                     {similar.map((movie) => (
                       <div
                         key={movie.id}
+                        onClick={() => router.push(`/${movie.id}`)}
                         className="cursor-pointer overflow-hidden rounded-lg bg-gray-700 transition-opacity hover:opacity-75"
                       >
                         <img src={movie.posterUrl} alt={movie.title} className="h-48 w-full object-cover" />
