@@ -1,17 +1,20 @@
 // @flow
+import { useRouter } from "next/navigation"
 import * as React from "react"
 import { FaHeart, FaHistory, FaSignOutAlt, FaUser } from "react-icons/fa"
 
 type Props = {
   isLoggedIn: boolean
-  currentTab: "favorites" | "movies" | "history"
+  currentTab: "favorite" | "movies" | "history"
 
-  setCurrentTab: (target: "favorites" | "movies" | "history") => void
+  setCurrentTab: (target: "favorite" | "movies" | "history") => void
   handleLogin: CallableFunction
   handleLogout: CallableFunction
 }
 
 export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, handleLogout }: Props) {
+  const router = useRouter()
+
   return (
     <nav className="bg-gray-800 p-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
@@ -20,7 +23,10 @@ export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, han
           {isLoggedIn ? (
             <>
               <button
-                onClick={() => setCurrentTab("movies")}
+                onClick={() => {
+                  router.push("/")
+                  setCurrentTab("movies")
+                }}
                 className={`rounded-md px-3 py-2 text-white ${
                   currentTab === "movies" ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
@@ -28,7 +34,10 @@ export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, han
                 Movies
               </button>
               <button
-                onClick={() => setCurrentTab("history")}
+                onClick={() => {
+                  router.push("/history")
+                  setCurrentTab("history")
+                }}
                 className={`flex items-center rounded-md px-3 py-2 text-white ${
                   currentTab === "history" ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
@@ -36,9 +45,12 @@ export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, han
                 <FaHistory className="mr-2" /> History
               </button>
               <button
-                onClick={() => setCurrentTab("favorites")}
+                onClick={() => {
+                  router.push("/favorite")
+                  setCurrentTab("favorite")
+                }}
                 className={`flex items-center rounded-md px-3 py-2 text-white ${
-                  currentTab === "favorites" ? "bg-blue-600" : "hover:bg-gray-700"
+                  currentTab === "favorite" ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
               >
                 <FaHeart className="mr-2" /> Favorites
