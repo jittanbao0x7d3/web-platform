@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useParams, useRouter } from "next/navigation"
 import * as React from "react"
 import { MovieDetail } from "@/components/MovieDetail"
-import tmdbClient, { baseImageUri } from "@/lib/utils/axios.tmdb"
+import tmdbClient from "@/lib/utils/axios.tmdb"
 
 export default function Page() {
   const router = useRouter()
@@ -23,7 +23,7 @@ export default function Page() {
         releaseDate: data.release_date,
         genres: data.genres.map((genre) => genre.name),
         synopsis: data.overview,
-        posterUrl: baseImageUri + data.poster_path,
+        posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face" + data.poster_path,
       }
     },
     enabled: !!id, // Only fetch if `id` is available
@@ -40,7 +40,7 @@ export default function Page() {
         id: movie.id,
         title: movie.title,
         rating: movie.vote_average,
-        posterUrl: baseImageUri + movie.poster_path,
+        posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face" + movie.poster_path,
       }))
     },
     enabled: !!id, // Only fetch if `id` is available

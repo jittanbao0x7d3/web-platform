@@ -18,7 +18,7 @@ export function MovieDetail({ movie, similar }) {
         <div className="overflow-hidden rounded-lg bg-gray-800 shadow-xl">
           <div className="md:flex">
             <div className="md:w-1/3">
-              <img src={movie.posterUrl} alt={movie.title} className="size-full object-cover" />
+              <img src={movie.posterUrl} alt={movie.title} className="object-cover" />
             </div>
             <div className="p-6 md:w-2/3">
               <h2 className="mb-4 text-3xl font-bold text-white">{movie.title}</h2>
