@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import { FaHeart, FaHistory, FaSignOutAlt, FaUser } from "react-icons/fa"
+import Link from "next/link";
 
 type Props = {
   isLoggedIn: boolean
@@ -18,7 +19,9 @@ export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, han
   return (
     <nav className="bg-gray-800 p-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">MovieApp</h1>
+        <h1 className="text-2xl font-bold text-white">
+          <Link href="/">MovieApp</Link>
+        </h1>;
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
             <>
