@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
 import React, { useState } from "react"
-import { FaStar } from "react-icons/fa"
+import MovieCard from "@/components/MovieCard";
 import { SearchBar } from "@/components/SearchBar"
-import tmdbClient, { baseImageUri } from "@/lib/utils/axios.tmdb"
+import tmdbClient from "@/lib/utils/axios.tmdb"
 
 const MovieApp = () => {
   const [filter, setFilter] = useState<string>("today")
@@ -11,7 +10,7 @@ const MovieApp = () => {
 
   const query = useQuery<any, any, { page: number; results: any[] }>({
     queryKey: ["MOVIE_LIST", filter, searchQuery],
-    queryFn: () => {
+    queryFn: async () => {
       const endpoint = searchQuery
         ? "/search/movie" // Search endpoint when query is present
         : filter === "today"
@@ -20,7 +19,8 @@ const MovieApp = () => {
 
       const params = searchQuery ? { query: searchQuery, language: "vi-VN" } : { language: "vi-VN" }
 
-      return tmdbClient.get(endpoint, { params }).then((data) => data.data)
+      const data = await tmdbClient.get(endpoint, { params })
+      return data.data
     },
   })
 
@@ -66,29 +66,3 @@ const MovieApp = () => {
 }
 
 export default MovieApp
-
-const MovieCard = ({ movie }: any) => {
-  const router = useRouter()
-
-  return (
-    <div className="overflow-hidden rounded-lg bg-gray-800 shadow-lg transition-transform duration-200 hover:scale-105">
-      <img src={baseImageUri + movie.backdrop_path} alt={movie.title} className="h-64 w-full object-cover" />
-      <div className="p-4">
-        <h3 className="mb-2 text-xl font-bold text-white">{movie.title}</h3>
-        <p className="mb-2 text-gray-400">{movie.release_date}</p>
-        <div className="mb-2 flex items-center">
-          <FaStar className="mr-1 text-yellow-400" />
-          <span className="text-white">{movie.vote_average}</span>
-        </div>
-        <button
-          onClick={() => {
-            router.push(`/${movie.id}`)
-          }}
-          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-        >
-          View Details
-        </button>
-      </div>
-    </div>
-  )
-}
