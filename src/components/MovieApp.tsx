@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useState } from "react"
-import MovieCard from "@/components/MovieCard";
+import MovieCard from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
 import tmdbClient from "@/lib/utils/axios.tmdb"
 

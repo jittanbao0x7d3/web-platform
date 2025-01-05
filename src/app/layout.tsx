@@ -3,8 +3,8 @@ import "../styles/tailwind.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
 import { NavBar } from "@/components/NavBar"
-import {MovieProvider} from "@/contexts/MoviesContext";
-import Footer from "@/components/Footer";
+import { MovieProvider } from "@/contexts/MoviesContext"
+import Footer from "@/components/Footer"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,18 +24,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <QueryClientProvider client={queryClient}>
           <MovieProvider>
-          <NavBar
-            isLoggedIn={isLoggedIn}
-            setCurrentTab={setCurrentTab}
-            currentTab={currentTab}
-            handleLogin={() => {
-              setIsLoggedIn(true)
-            }}
-            handleLogout={() => {
-              setIsLoggedIn(false)
-            }}
-          />
-          {children}
+            <NavBar
+              isLoggedIn={isLoggedIn}
+              setCurrentTab={setCurrentTab}
+              currentTab={currentTab}
+              handleLogin={() => {
+                setIsLoggedIn(true)
+              }}
+              handleLogout={() => {
+                setIsLoggedIn(false)
+              }}
+            />
+            {children}
             <Footer />
           </MovieProvider>
         </QueryClientProvider>
