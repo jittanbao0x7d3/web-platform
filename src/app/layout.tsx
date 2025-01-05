@@ -3,6 +3,8 @@ import "../styles/tailwind.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
 import { NavBar } from "@/components/NavBar"
+import {MovieProvider} from "@/contexts/MoviesContext";
+import Footer from "@/components/Footer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <QueryClientProvider client={queryClient}>
+          <MovieProvider>
           <NavBar
             isLoggedIn={isLoggedIn}
             setCurrentTab={setCurrentTab}
@@ -33,6 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
           {children}
+            <Footer />
+          </MovieProvider>
         </QueryClientProvider>
       </body>
     </html>
