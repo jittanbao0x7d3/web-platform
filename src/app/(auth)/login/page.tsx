@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      window.location.href = "/api/v1/auth/google"
+      window.location.href = "http://localhost:5000/auth/google"
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
     }
@@ -26,7 +26,7 @@ const LoginPage = () => {
   const handleSubmit = async (data) => {
     try {
       // Call the API
-      const response = await fetch("/api/v1/auth/login", {
+      const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,12 +34,11 @@ const LoginPage = () => {
         body: JSON.stringify(data),
       })
 
-      if (!response.ok) {
-        throw new Error("Failed to login. Please check your credentials.")
+      const resp: any = await response.json()
+      if (resp.status === "error") {
+        alert(resp.message)
+        return
       }
-
-      const resp = await response.json()
-      console.log("Login successful:", resp)
 
       // Redirect or perform further actions
       alert("Login successful!")

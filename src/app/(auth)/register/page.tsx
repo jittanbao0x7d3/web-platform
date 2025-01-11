@@ -7,7 +7,8 @@ import * as React from "react"
 import { z } from "zod"
 
 const registerSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
 })
@@ -17,7 +18,7 @@ const RegisterPage = () => {
   const handleSubmit = async (data) => {
     try {
       // Call the API
-      const response = await fetch("/api/v1/auth/register", {
+      const response = await fetch("http://localhost:5000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,12 +30,16 @@ const RegisterPage = () => {
         throw new Error("Failed to login. Please check your credentials.")
       }
 
-      const resp = await response.json()
-      console.log("Login successful:", resp)
+      const resp: any = await response.json()
+      if (resp.status === "error") {
+        alert(resp.message)
+        return
+      }
 
-      // Redirect or perform further actions
-      alert("Register successful!")
-      router.push("/login")
+      if (resp.status === "success") {
+        alert("Register successful!")
+        router.push("/login")
+      }
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
     }
@@ -58,10 +63,28 @@ const RegisterPage = () => {
       <div className="w-full max-w-md space-y-6">
         <h1 className="text-center text-2xl font-bold">Register</h1>
         <Form.Root onSubmit={handleFormSubmit} className="space-y-4">
-          {/* Name Field */}
-          <Form.Field name="name">
+          {/* First Name Field */}
+          <Form.Field name="firstName">
             <div className="flex flex-col">
-              <Form.Label className="mb-1 text-sm font-medium">Name</Form.Label>
+              <Form.Label className="mb-1 text-sm font-medium">First Name</Form.Label>
+              <Form.Control asChild>
+                <input
+                  className="w-full rounded border border-gray-300 p-2"
+                  type="text"
+                  placeholder="Enter your name"
+                  required
+                />
+              </Form.Control>
+            </div>
+            <Form.Message className="mt-1 text-sm text-red-500" match="valueMissing">
+              Name is required.
+            </Form.Message>
+          </Form.Field>
+
+          {/* Last Name field */}
+          <Form.Field name="lastName">
+            <div className="flex flex-col">
+              <Form.Label className="mb-1 text-sm font-medium">Last Name</Form.Label>
               <Form.Control asChild>
                 <input
                   className="w-full rounded border border-gray-300 p-2"
