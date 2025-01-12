@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      window.location.href = "http://localhost:5000/auth/google"
+      window.location.href = process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/google"
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
     }
@@ -26,7 +26,7 @@ const LoginPage = () => {
   const handleSubmit = async (data) => {
     try {
       // Call the API
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
