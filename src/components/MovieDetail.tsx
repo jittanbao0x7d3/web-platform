@@ -79,8 +79,7 @@ export function MovieDetail({ movie, similar }) {
         return
       }
 
-      // Update reviews
-      setReviews([...reviews, resp.data])
+      await fetchReviews()
       setReviewText("")
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
