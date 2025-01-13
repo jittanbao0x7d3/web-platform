@@ -33,7 +33,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       localStorage.setItem("movieIds", JSON.stringify(movieIds))
       localStorage.setItem("movieHistoryIds", JSON.stringify(movieHistoryIds))
     }
-  }, [movieIds])
+  }, [movieIds, movieHistoryIds])
 
   const addMovieHistoryId = (newId: string) => {
     const newMovies = movieHistoryIds.filter((id) => id !== newId)
