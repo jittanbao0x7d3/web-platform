@@ -43,7 +43,7 @@ const LoginPage = () => {
       // Redirect or perform further actions
       alert("Login successful!")
       localStorage.setItem("token", resp.access_token)
-      router.push("/")
+      window.location.href = "/"
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
     }

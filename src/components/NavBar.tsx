@@ -24,6 +24,8 @@ export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }:
     const token = localStorage.getItem("token")
     if (token) {
       setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
     }
   }, [])
 

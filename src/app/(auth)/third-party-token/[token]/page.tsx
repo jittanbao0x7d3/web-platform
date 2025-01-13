@@ -12,7 +12,7 @@ const ThirdPartyToken = () => {
       if (typeof token === "string") {
         localStorage.setItem("token", token)
       }
-      router.push("/")
+      window.location.href = "/"
     } else {
       router.push("/login")
       alert("Invalid token")

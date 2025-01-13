@@ -30,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const handleLogout = () => {
     console.log("Logging out...")
     localStorage.removeItem("token")
+    window.location.href = "/"
   }
 
   return (
