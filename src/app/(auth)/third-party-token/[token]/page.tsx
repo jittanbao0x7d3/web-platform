@@ -1,26 +1,23 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import React, { useEffect } from "react"
 
-const ThirdPartyToken = ({ params }: { params: { token: string } }) => {
+const ThirdPartyToken = () => {
   const router = useRouter()
+  const { token } = useParams()
 
   useEffect(() => {
-    const parseToken = () => {
-      const token = params.token
-      console.log(token)
-      if (token) {
+    if (token) {
+      if (typeof token === "string") {
         localStorage.setItem("token", token)
-        router.push("/")
-      } else {
-        router.push("/login")
-        alert("Invalid token")
       }
+      router.push("/")
+    } else {
+      router.push("/login")
+      alert("Invalid token")
     }
-
-    parseToken()
-  }, [])
+  }, [router, token])
 
   return (
     <div>

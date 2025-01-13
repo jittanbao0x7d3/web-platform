@@ -1,8 +1,8 @@
 // @flow
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import { FaHeart, FaHistory, FaSignOutAlt, FaUser } from "react-icons/fa"
-import Link from "next/link"
 
 type Props = {
   isLoggedIn: boolean
@@ -13,8 +13,9 @@ type Props = {
   handleLogout: CallableFunction
 }
 
-export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, handleLogout }: Props) {
+export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }: Props) {
   const router = useRouter()
+  const isLoggedIn = localStorage.getItem("token")
 
   return (
     <nav className="bg-gray-800 p-4 shadow-lg">
@@ -60,7 +61,10 @@ export function NavBar({ isLoggedIn, currentTab, setCurrentTab, handleLogin, han
                 <FaHeart className="mr-2" /> Favorites
               </button>
               <button
-                onClick={() => handleLogout()}
+                onClick={() => {
+                  handleLogout()
+                  router.refresh()
+                }}
                 className="flex items-center rounded-md px-3 py-2 text-white hover:bg-gray-700"
               >
                 <FaSignOutAlt className="mr-2" /> Logout
