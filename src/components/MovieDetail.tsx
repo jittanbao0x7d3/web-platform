@@ -99,6 +99,7 @@ export function MovieDetail({ movie, similar }) {
         body: JSON.stringify({
           userId: localStorage.getItem("userId"),
           movieId: window.location.pathname.split("/")[1],
+          movieTitle: movie.title,
           rating: rating,
         }),
       })
@@ -168,28 +169,28 @@ export function MovieDetail({ movie, similar }) {
               </div>
 
               {cast && (
-                  <div className="mb-6">
-                    <h3 className="mb-4 text-xl font-semibold text-white">Cast</h3>
-                    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                      {cast.map((person) => (
-                          <div
-                              key={person.id}
-                              onClick={() => router.push(`/casts/${person.id}`)}
-                              className="cursor-pointer overflow-hidden rounded-lg bg-gray-700 transition-transform hover:scale-105"
-                          >
-                            <img
-                                src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
-                                alt={person.name}
-                                className="h-40 w-full object-cover"
-                            />
-                            <div className="p-2">
-                              <p className="truncate text-sm font-semibold text-white">{person.name}</p>
-                              <p className="truncate text-xs text-gray-300">{person.character}</p>
-                            </div>
-                          </div>
-                      ))}
-                    </div>
+                <div className="mb-6">
+                  <h3 className="mb-4 text-xl font-semibold text-white">Cast</h3>
+                  <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    {cast.map((person) => (
+                      <div
+                        key={person.id}
+                        onClick={() => router.push(`/casts/${person.id}`)}
+                        className="cursor-pointer overflow-hidden rounded-lg bg-gray-700 transition-transform hover:scale-105"
+                      >
+                        <img
+                          src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                          alt={person.name}
+                          className="h-40 w-full object-cover"
+                        />
+                        <div className="p-2">
+                          <p className="truncate text-sm font-semibold text-white">{person.name}</p>
+                          <p className="truncate text-xs text-gray-300">{person.character}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                </div>
               )}
 
               <div className="flex items-center gap-2">
