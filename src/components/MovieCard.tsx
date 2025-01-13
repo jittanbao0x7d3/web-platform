@@ -8,6 +8,30 @@ const MovieCard = ({ movie, path }: any) => {
   const { addMovieHistoryId, addMovieId } = useMovieContext()
   const router = useRouter()
 
+  const handleAddMovie = async (path: string) => {
+    const userId = localStorage.getItem("userId")
+    const token = localStorage.getItem("token")
+    if (userId && token) {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + "/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId, movieId: path }),
+      })
+      const data = await response.json()
+
+      if (data.movieIds) {
+        alert("Movie added to favorites")
+      } else {
+        alert("Failed to add movie to favorites")
+      }
+    } else {
+      alert("Please login to add movie to favorites")
+    }
+  }
+
   return (
     <div className="overflow-hidden rounded-lg bg-gray-800 shadow-lg transition-transform duration-200 hover:scale-105">
       <img src={baseImageUri + movie.backdrop_path} alt={movie.title} className="h-64 w-full object-cover" />
@@ -35,7 +59,7 @@ const MovieCard = ({ movie, path }: any) => {
             <button
               className="flex items-center justify-center rounded-full bg-gray-700 p-2 transition-colors hover:bg-gray-600"
               onClick={() => {
-                addMovieId(path)
+                handleAddMovie(path)
               }}
             >
               <FaHeart className="text-white" />
