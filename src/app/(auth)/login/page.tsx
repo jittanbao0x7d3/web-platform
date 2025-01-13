@@ -43,6 +43,8 @@ const LoginPage = () => {
       // Redirect or perform further actions
       alert("Login successful!")
       localStorage.setItem("token", resp.access_token)
+      localStorage.setItem("userId", resp.user._id)
+      localStorage.setItem("email", resp.user.email)
       window.location.href = "/"
     } catch (err: any) {
       alert(err.message || "Something went wrong.")
