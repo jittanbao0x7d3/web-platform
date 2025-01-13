@@ -9,7 +9,7 @@ import { baseLandScapeImageUri } from "@/lib/utils/axios.tmdb"
 export function MovieDetail({ movie, similar }) {
   const router = useRouter()
 
-  const genresList = join(movie?.genres, "_")
+  const genresList = movie?.genre_ids ? join(movie.gere_ids) : join(movie?.genres, "_")
   const queryGenres = useQueryMovie({
     url: `movie-genres/${genresList}`,
     key: ["GENRES_LIST", genresList],
@@ -19,6 +19,8 @@ export function MovieDetail({ movie, similar }) {
   if (!movie) {
     return
   }
+
+  const cast = movie?.credits?.cast
 
   return (
     <div className="min-h-screen bg-gray-900 p-6">
@@ -62,6 +64,31 @@ export function MovieDetail({ movie, similar }) {
                 <h3 className="mb-2 text-xl font-semibold text-white">Synopsis</h3>
                 <p className="text-gray-300">{movie.overview}</p>
               </div>
+
+              {cast && (
+                  <div className="mb-6">
+                    <h3 className="mb-4 text-xl font-semibold text-white">Cast</h3>
+                    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                      {cast.map((person) => (
+                          <div
+                              key={person.id}
+                              onClick={() => router.push(`/casts/${person.id}`)}
+                              className="cursor-pointer overflow-hidden rounded-lg bg-gray-700 transition-transform hover:scale-105"
+                          >
+                            <img
+                                src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                                alt={person.name}
+                                className="h-40 w-full object-cover"
+                            />
+                            <div className="p-2">
+                              <p className="truncate text-sm font-semibold text-white">{person.name}</p>
+                              <p className="truncate text-xs text-gray-300">{person.character}</p>
+                            </div>
+                          </div>
+                      ))}
+                    </div>
+                  </div>
+              )}
 
               {similar.length > 0 && (
                 <div>
