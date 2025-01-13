@@ -18,6 +18,9 @@ const getFavoriteMovies = async () => {
     })
     const data = await response.json()
     // console.log(data)
+    if (!data) {
+      return []
+    }
 
     if (data[0].movieIds) {
       return data[0].movieIds

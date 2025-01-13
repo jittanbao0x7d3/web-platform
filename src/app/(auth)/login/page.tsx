@@ -45,6 +45,7 @@ const LoginPage = () => {
       localStorage.setItem("token", resp.access_token)
       localStorage.setItem("userId", resp.user._id)
       localStorage.setItem("email", resp.user.email)
+      localStorage.setItem("name", resp.user.firstName + " " + resp.user.lastName)
       window.location.href = "/"
     } catch (err: any) {
       alert(err.message || "Something went wrong.")

@@ -32,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     localStorage.removeItem("token")
     localStorage.removeItem("userId")
     localStorage.removeItem("email")
+    localStorage.removeItem("name")
     window.location.href = "/"
   }
 

@@ -22,6 +22,7 @@ const ThirdPartyToken = () => {
       if (data) {
         localStorage.setItem("userId", data._id)
         localStorage.setItem("email", data.email)
+        localStorage.setItem("name", data.firstName + " " + data.lastName)
       }
     } else {
       return null
