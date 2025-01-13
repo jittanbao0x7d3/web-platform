@@ -28,7 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
 
   const handleLogout = () => {
-    // Simulate a logout action
     console.log("Logging out...")
     localStorage.removeItem("token")
   }

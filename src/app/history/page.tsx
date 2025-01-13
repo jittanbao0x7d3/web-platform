@@ -19,7 +19,9 @@ export default function Web() {
           <p className="text-center text-red-500">Error loading movies.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {movies?.map((movie: any) => <MovieCard key={movie.id} movie={movie} />)}
+            {movies?.map((movie: any, index: number) => (
+              <MovieCard key={movie.id} movie={movie} path={movieHistoryIds[index]} />
+            ))}
           </div>
         )}
       </div>

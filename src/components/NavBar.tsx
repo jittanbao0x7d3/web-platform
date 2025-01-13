@@ -16,7 +16,16 @@ type Props = {
 
 export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }: Props) {
   const router = useRouter()
-  const isLoggedIn = localStorage.getItem("token")
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+
+  // Check if user is logged in
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      setIsLoggedIn(true)
+    }
+  }, [])
 
   return (
     <nav className="bg-gray-800 p-4 shadow-lg">
