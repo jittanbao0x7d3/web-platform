@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation"
-import { baseImageUri } from "@/lib/utils/axios.tmdb"
-import { FaStar, FaHeart } from "react-icons/fa"
 import React from "react"
+import { FaHeart, FaStar } from "react-icons/fa"
 import { useMovieContext } from "@/contexts/MoviesContext"
+import { baseImageUri } from "@/lib/utils/axios.tmdb"
 
 const MovieCard = ({ movie }: any) => {
   const { addMovieHistoryId, addMovieId } = useMovieContext()
@@ -10,13 +10,13 @@ const MovieCard = ({ movie }: any) => {
   const router = useRouter()
   return (
     <div className="overflow-hidden rounded-lg bg-gray-800 shadow-lg transition-transform duration-200 hover:scale-105">
-      <img src={baseImageUri + movie.backdrop_path} alt={movie.title} className="h-64 w-full object-cover" />
+      <img src={baseImageUri + movie.backdropPath} alt={movie.title} className="h-64 w-full object-cover" />
       <div className="p-4">
         <h3 className="mb-2 text-xl font-bold text-white">{movie.title}</h3>
-        <p className="mb-2 text-gray-400">{movie.release_date}</p>
+        <p className="mb-2 text-gray-400">{movie.releaseDate}</p>
         <div className="mb-2 flex items-center">
           <FaStar className="mr-1 text-yellow-400" />
-          <span className="text-white">{movie.vote_average}</span>
+          <span className="text-white">{movie.voteAverage}</span>
         </div>
         <div className="flex items-center space-x-2">
           <button

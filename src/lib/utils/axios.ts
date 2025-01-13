@@ -1,12 +1,18 @@
 import axios from "axios"
+import applyCaseMiddleware from "axios-case-converter"
 
-const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
+const axiosInstance = applyCaseMiddleware(
+  axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
+    timeout: 10000,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }),
+  {
+    ignoreHeaders: true,
+  }
+)
 
 axiosInstance.interceptors.request.use(
   (config) => {

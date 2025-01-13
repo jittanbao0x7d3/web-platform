@@ -1,27 +1,60 @@
-import { useQuery } from "@tanstack/react-query"
+import Autoplay from "embla-carousel-autoplay"
 import React, { useState } from "react"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/Carousel"
 import MovieCard from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
-import tmdbClient from "@/lib/utils/axios.tmdb"
+import { useQueryMovie } from "@/lib/hooks/useQueryMovie"
+import { baseLandscapeImageUri } from "@/lib/utils/axios.tmdb"
+
+const options = [
+  {
+    key: "today",
+    value: "Trending Today",
+  },
+  {
+    key: "week",
+    value: "Trending This Week",
+  },
+  {
+    key: "popular",
+    value: "Popular",
+  },
+  {
+    key: "topRated",
+    value: "Top Rated",
+  },
+  {
+    key: "upcoming",
+    value: "Upcoming",
+  },
+]
+
+const urlMapper = {
+  today: "movies-trending-day",
+  week: "movie-trending-week",
+  popular: "movies-popular",
+  topRated: "movies-top-rated",
+  upcoming: "movie-upcoming",
+}
 
 const MovieApp = () => {
   const [filter, setFilter] = useState<string>("today")
   const [searchQuery, setSearchQuery] = useState<string>("")
 
-  const query = useQuery<any, any, { page: number; results: any[] }>({
-    queryKey: ["MOVIE_LIST", filter, searchQuery],
-    queryFn: async () => {
-      const endpoint = searchQuery
-        ? "/search/movie" // Search endpoint when query is present
-        : filter === "today"
-        ? "/trending/movie/day"
-        : "/trending/movie/week"
-
-      const params = searchQuery ? { query: searchQuery, language: "vi-VN" } : { language: "vi-VN" }
-
-      const data = await tmdbClient.get(endpoint, { params })
-      return data.data
+  const query = useQueryMovie({
+    key: ["MOVIE_LIST", filter],
+    url: searchQuery ? "/search/movie" : urlMapper[filter],
+    params: {
+      limit: 10,
+      page: 1,
+      search: searchQuery,
     },
+  })
+
+  const nowPlayingQuery = useQueryMovie({
+    key: ["NOW_PLAYING"],
+    url: "movies-now-playing",
+    params: {},
   })
 
   const handleSearch = (query: string) => {
@@ -31,25 +64,46 @@ const MovieApp = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="mb-8 text-center text-4xl font-bold text-white">Trending Movies</h1>
         <SearchBar onSearch={handleSearch} />
+
+        <div className="my-5 min-h-36 w-full">
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 5000,
+              }),
+            ]}
+            className="flex items-center"
+          >
+            <CarouselContent>
+              {nowPlayingQuery.data?.map((movie: any) => (
+                <CarouselItem key={movie.title} className="flex w-full flex-col items-center px-24">
+                  <p className="p-2 text-4xl text-white">{movie.originalTitle}</p>
+                  <img
+                    src={baseLandscapeImageUri + movie.backdropPath}
+                    alt={movie.title}
+                    className="w-full object-cover"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+
         <div className="mb-8 flex justify-center gap-4">
-          <button
-            onClick={() => setFilter("today")}
-            className={`rounded-md px-4 py-2 ${
-              filter === "today" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"
-            }`}
-          >
-            Today
-          </button>
-          <button
-            onClick={() => setFilter("week")}
-            className={`rounded-md px-4 py-2 ${
-              filter === "week" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"
-            }`}
-          >
-            This Week
-          </button>
+          {options.map(({ key, value }) => (
+            <button
+              key={key}
+              onClick={() => setFilter(key)}
+              className={`rounded-md px-4 py-2 ${
+                filter === key ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"
+              }`}
+            >
+              {value}
+            </button>
+          ))}
         </div>
         {query.isLoading ? (
           <p className="text-center text-white">Loading...</p>
@@ -57,7 +111,7 @@ const MovieApp = () => {
           <p className="text-center text-red-500">Error loading movies.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {query.data?.results?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
+            {query.data?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
           </div>
         )}
       </div>
