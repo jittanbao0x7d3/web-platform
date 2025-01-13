@@ -1,7 +1,8 @@
 import axios from "axios"
 
 export const baseImageUri = "https://media.themoviedb.org/t/p/w533_and_h300_bestv2"
-export const baseLandscapeImageUri = "https://media.themoviedb.org/t/p/w1066_and_h600_bestv2"
+export const basePortraitImageUri = "https://media.themoviedb.org/t/p/w1066_and_h600_bestv2"
+export const baseLandScapeImageUri = "https://media.themoviedb.org/t/p/w600_and_h900_bestv2"
 
 const tmdbClient = axios.create({
   baseURL: "https://api.themoviedb.org/3",

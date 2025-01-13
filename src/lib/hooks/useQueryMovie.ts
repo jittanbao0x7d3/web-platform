@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import axiosInstance from "@/lib/utils/axios"
+import { axiosInstance } from "@/lib/utils/axios"
 
 interface Option {
   url: string
@@ -18,6 +18,19 @@ export const useQueryMovie = (option: Option) => {
     queryFn: async () => {
       const data = await axiosInstance.get(url, {
         params,
+      })
+
+      return data.data
+    },
+  })
+}
+
+export const useQueryManyMovies = (option: { body: string[] }) => {
+  return useQuery({
+    queryKey: ["QUERY_LIST_FUCKING_MOVIE", option.body],
+    queryFn: async () => {
+      const data = await axiosInstance.post("/movies/find-many", {
+        path: option.body,
       })
 
       return data.data

@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import MovieCard from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
 import { useQueryMovie } from "@/lib/hooks/useQueryMovie"
-import { baseLandscapeImageUri } from "@/lib/utils/axios.tmdb"
+import { basePortraitImageUri } from "@/lib/utils/axios.tmdb"
 
 const options = [
   {
@@ -78,9 +78,9 @@ const MovieApp = () => {
             <CarouselContent>
               {nowPlayingQuery.data?.map((movie: any) => (
                 <CarouselItem key={movie.title} className="flex w-full flex-col items-center px-24">
-                  <p className="p-2 text-4xl text-white">{movie.originalTitle}</p>
+                  <p className="p-2 text-4xl text-white">{movie.original_title}</p>
                   <img
-                    src={baseLandscapeImageUri + movie.backdropPath}
+                    src={basePortraitImageUri + movie.backdrop_path}
                     alt={movie.title}
                     className="w-full object-cover"
                   />
@@ -111,7 +111,9 @@ const MovieApp = () => {
           <p className="text-center text-red-500">Error loading movies.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {query.data?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
+            {query.data?.map((movie) => (
+              <MovieCard key={movie._id} path={`${urlMapper[filter]}_${movie._id}`} movie={movie} />
+            ))}
           </div>
         )}
       </div>

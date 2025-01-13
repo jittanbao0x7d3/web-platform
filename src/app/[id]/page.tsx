@@ -1,53 +1,29 @@
 "use client"
-import { useQuery } from "@tanstack/react-query"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import * as React from "react"
+import { useEffect } from "react"
 import { MovieDetail } from "@/components/MovieDetail"
-import tmdbClient from "@/lib/utils/axios.tmdb"
+import { useMovieContext } from "@/contexts/MoviesContext"
+import { useQueryMovie } from "@/lib/hooks/useQueryMovie"
 
 export default function Page() {
-  const router = useRouter()
   const { id } = useParams()
+  const { addMovieHistoryId } = useMovieContext()
+  const [path, ref] = (id as string)?.split("_")
 
-  // Fetch movie details
-  const movieQuery = useQuery({
-    queryKey: ["MOVIE_DETAILS", id],
-    queryFn: async () => {
-      const response = await tmdbClient.get(`/movie/${id}`, {
-        params: { language: "vi-VN" },
-      })
-      const data = response.data
-      return {
-        title: data.title,
-        rating: data.vote_average,
-        releaseDate: data.release_date,
-        genres: data.genres.map((genre) => genre.name),
-        synopsis: data.overview,
-        posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face" + data.poster_path,
-      }
-    },
-    enabled: !!id, // Only fetch if `id` is available
+  const movieDetail = useQueryMovie({
+    url: `${path}/${ref}`,
+    params: {},
+    // @ts-ignore
+    key: ["MOVIE_DETAIL", `${path}/${ref}`],
   })
 
-  // Fetch similar movies
-  const similarMoviesQuery = useQuery({
-    queryKey: ["SIMILAR_MOVIES", id],
-    queryFn: async () => {
-      const response = await tmdbClient.get(`/movie/${id}/similar`, {
-        params: { language: "vi-VN" },
-      })
-      return response.data.results.map((movie: any) => ({
-        id: movie.id,
-        title: movie.title,
-        rating: movie.vote_average,
-        posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face" + movie.poster_path,
-      }))
-    },
-    enabled: !!id, // Only fetch if `id` is available
-  })
+  useEffect(() => {
+    addMovieHistoryId(id as string)
+  }, [])
 
   // Handle loading and error states
-  if (movieQuery.isLoading || similarMoviesQuery.isLoading) {
+  if (movieDetail.isLoading || movieDetail.isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-900">
         <div className="size-32 animate-spin rounded-full border-b-2 border-blue-500"></div>
@@ -55,21 +31,6 @@ export default function Page() {
     )
   }
 
-  if (movieQuery.isError || similarMoviesQuery.isError) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-900 p-6">
-        <div className="text-center text-white">
-          <p className="mb-4 text-xl">
-            {movieQuery.error?.message || similarMoviesQuery.error?.message || "An error occurred"}
-          </p>
-          <button onClick={() => router.push("/")} className="rounded-md bg-blue-600 px-4 py-2 hover:bg-blue-700">
-            Back to Movies
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   // Render MovieDetail component
-  return <MovieDetail movie={movieQuery.data} similar={similarMoviesQuery.data} />
+  return <MovieDetail movie={movieDetail.data} similar={[]} />
 }

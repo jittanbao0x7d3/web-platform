@@ -1,18 +1,12 @@
 import axios from "axios"
-import applyCaseMiddleware from "axios-case-converter"
 
-const axiosInstance = applyCaseMiddleware(
-  axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
-    timeout: 10000,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }),
-  {
-    ignoreHeaders: true,
-  }
-)
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -28,9 +22,23 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error("API Error:", error.response || error.message)
     return Promise.reject(error)
   }
 )
 
-export default axiosInstance
+const aixios = axios.create({
+  baseURL: "https://awd-llm.azurewebsites.net",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+export { aixios, axiosInstance }
