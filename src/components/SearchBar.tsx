@@ -1,20 +1,22 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import * as motion from "motion/react-client"
+import { useRouter } from "next/navigation"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
-import { FaChevronDown, FaSearch } from "react-icons/fa"
+import { FaSearch } from "react-icons/fa"
 
 export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [searchType, setSearchType] = useState<"name" | "actor" | "AI">("name")
-  const [showMenu, setShowMenu] = useState(false)
+  const router = useRouter()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     onSearch(searchQuery.trim())
     setOpen(false)
+
+    router.push("/search/movies")
   }
 
   useEffect(() => {
@@ -67,41 +69,14 @@ export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder={searchType != "AI" ? `Search movies by ${searchType}...` : "Ask me a question..."}
+                  placeholder={"Search movies"}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-lg bg-gray-800 px-4 py-3 pl-10 text-lg text-white focus:outline-none "
                 />
                 <FaSearch className="absolute left-3 top-4 text-gray-400" />
 
-                <div className="absolute right-24 top-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowMenu(!showMenu)}
-                    className="flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-1.5 text-white hover:bg-gray-600 focus:outline-none"
-                  >
-                    {searchType.charAt(0).toUpperCase() + searchType.slice(1)}
-                    <FaChevronDown className={`transition-transform${showMenu ? "rotate-180" : ""}`} />
-                  </button>
-
-                  {showMenu && (
-                    <div className="absolute mt-1 w-32 rounded-lg bg-gray-700 py-1 shadow-lg">
-                      {["name", "actor", "AI"].map((type) => (
-                        <button
-                          key={type}
-                          type="button"
-                          onClick={() => {
-                            setSearchType(type as "name" | "actor" | "AI")
-                            setShowMenu(false)
-                          }}
-                          className="block w-full px-4 py-2 text-left text-white hover:bg-gray-600"
-                        >
-                          {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <div className="absolute right-24 top-2 text-white"></div>
 
                 <button
                   type="submit"

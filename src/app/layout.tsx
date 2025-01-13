@@ -3,6 +3,7 @@ import "../styles/tailwind.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Toaster } from "sonner"
 import Footer from "@/components/Footer"
 import { NavBar } from "@/components/NavBar"
 import { MovieProvider } from "@/contexts/MoviesContext"
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
             {children}
             <Footer />
+            <Toaster />
           </MovieProvider>
         </QueryClientProvider>
       </body>

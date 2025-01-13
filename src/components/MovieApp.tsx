@@ -1,4 +1,5 @@
 import Autoplay from "embla-carousel-autoplay"
+import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/Carousel"
 import MovieCard from "@/components/MovieCard"
@@ -38,16 +39,15 @@ const urlMapper = {
 }
 
 const MovieApp = () => {
+  const router = useRouter()
   const [filter, setFilter] = useState<string>("today")
-  const [searchQuery, setSearchQuery] = useState<string>("")
 
   const query = useQueryMovie({
     key: ["MOVIE_LIST", filter],
-    url: searchQuery ? "/search/movie" : urlMapper[filter],
+    url: urlMapper[filter],
     params: {
       limit: 10,
       page: 1,
-      search: searchQuery,
     },
   })
 
@@ -58,7 +58,7 @@ const MovieApp = () => {
   })
 
   const handleSearch = (query: string) => {
-    setSearchQuery(query)
+    router.push(`/search/${query}`)
   }
 
   return (

@@ -1,9 +1,11 @@
 "use client"
 
+import { Banana } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import { FaHeart, FaHistory, FaSignOutAlt, FaUser } from "react-icons/fa"
+import { toast } from "sonner"
 
 type Props = {
   isLoggedIn: boolean
@@ -32,10 +34,27 @@ export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }:
   return (
     <nav className="bg-gray-800 p-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">
-          <Link href="/">MovieApp</Link>
+        <h1 className="flex text-white">
+          <Link className="text-2xl font-bold" href="/">
+            MovieApp
+          </Link>
+          <button
+            className={` flex rounded-md px-3 py-2 text-white hover:bg-gray-700`}
+            onClick={() => {
+              if (localStorage.getItem("aimode")) {
+                localStorage.removeItem("aimode")
+                toast("Switched to normal mode")
+              } else {
+                localStorage.setItem("aimode", "ok")
+                toast("Switched to AI mode")
+              }
+            }}
+          >
+            <Banana />
+            Use AI mode
+          </button>
         </h1>
-        ;
+
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
             <>
