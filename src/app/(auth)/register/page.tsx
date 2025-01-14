@@ -37,7 +37,8 @@ const RegisterPage = () => {
       }
 
       if (resp.status === "success") {
-        alert("Register successful!")
+        alert("Register successful! Check your email to verify your account.")
+
         router.push("/login")
       }
     } catch (err: any) {
