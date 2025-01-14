@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { PropsWithChildren, useEffect } from "react"
+import { PropsWithChildren } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { FaSearch } from "react-icons/fa"
 import { ButtonLoading } from "@/components/Button"
@@ -12,6 +12,7 @@ export default function Web({ children }: PropsWithChildren) {
   const { searchMode } = useMovieContext()
 
   const { mutate, isPending } = useSearch()
+
   const onSubmit: SubmitHandler<{ query: string }> = async ({ query }) => {
     mutate({
       query,
@@ -19,14 +20,10 @@ export default function Web({ children }: PropsWithChildren) {
     })
   }
 
-  useEffect(() => {
-    console.log("SEARCH DATA")
-  }, [])
-
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="container mx-auto px-4 py-8">
-        <div className="relative mx-auto max-w-2xl cursor-pointer">
+        <div className="relative mx-auto mb-10 max-w-2xl cursor-pointer">
           <form onSubmit={handleSubmit(onSubmit)} className="relative mx-auto w-full">
             <div className="relative">
               <input
