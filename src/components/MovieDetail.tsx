@@ -57,6 +57,17 @@ export function MovieDetail({ movie, similar }) {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault()
+
+    if (!localStorage.getItem("token")) {
+      alert("Please login to leave a review.")
+      return
+    }
+
+    if (!reviewText) {
+      alert("Please enter your review.")
+      return
+    }
+
     try {
       // Call the API
       const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + "/reviews", {
@@ -87,6 +98,10 @@ export function MovieDetail({ movie, similar }) {
   }
 
   const handleRatingSubmit = async (e) => {
+    if (!localStorage.getItem("token")) {
+      alert("Please login to leave a review.")
+      return
+    }
     e.preventDefault()
     try {
       // Call the API
