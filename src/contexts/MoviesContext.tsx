@@ -7,6 +7,12 @@ type MovieContextType = {
   addMovieHistoryId: (id: string) => void
   removeMovieId: (id: string) => void
   clearMovieIds: () => void
+
+  searchMode: string
+  setSearchMode: (mode: string) => void
+
+  searchResponse: any[]
+  setSearchResponse: React.Dispatch<any>
 }
 
 const MovieContext = createContext<MovieContextType | undefined>(undefined)
@@ -14,6 +20,8 @@ const MovieContext = createContext<MovieContextType | undefined>(undefined)
 export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [movieIds, setMovieIds] = useState<string[]>([])
   const [movieHistoryIds, setMovieHistoryIds] = useState<string[]>([])
+  const [searchMode, setSearchMode] = useState("llm")
+  const [searchResponse, setSearchResponse] = useState<any[]>([])
 
   // Ensure this runs only in the browser
   useEffect(() => {
@@ -55,7 +63,18 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <MovieContext.Provider
-      value={{ movieIds, movieHistoryIds, addMovieId, addMovieHistoryId, removeMovieId, clearMovieIds }}
+      value={{
+        movieIds,
+        movieHistoryIds,
+        addMovieId,
+        addMovieHistoryId,
+        removeMovieId,
+        clearMovieIds,
+        searchMode,
+        setSearchMode,
+        searchResponse,
+        setSearchResponse,
+      }}
     >
       {children}
     </MovieContext.Provider>

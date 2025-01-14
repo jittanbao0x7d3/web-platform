@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation"
 import React from "react"
 import { FaHeart, FaStar } from "react-icons/fa"
+import { toast } from "sonner"
 import { useMovieContext } from "@/contexts/MoviesContext"
 import { baseImageUri } from "@/lib/utils/axios.tmdb"
 
@@ -23,12 +24,12 @@ const MovieCard = ({ movie, path }: any) => {
       const data = await response.json()
 
       if (data.movieIds) {
-        alert("Movie added to favorites")
+        toast("Movie added to favorites")
       } else {
-        alert("Failed to add movie to favorites")
+        toast("Failed to add movie to favorites")
       }
     } else {
-      alert("Please login to add movie to favorites")
+      toast("Please login to add movie to favorites")
     }
   }
 

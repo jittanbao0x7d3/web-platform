@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import * as React from "react"
 import { FaHeart, FaHistory, FaSignOutAlt, FaUser } from "react-icons/fa"
 import { toast } from "sonner"
+import { useMovieContext } from "@/contexts/MoviesContext"
 
 type Props = {
   isLoggedIn: boolean
@@ -19,6 +20,7 @@ type Props = {
 export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }: Props) {
   const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const { searchMode, setSearchMode } = useMovieContext()
 
   // Check if user is logged in
 
@@ -41,11 +43,11 @@ export function NavBar({ currentTab, setCurrentTab, handleLogin, handleLogout }:
           <button
             className={` flex rounded-md px-3 py-2 text-white hover:bg-gray-700`}
             onClick={() => {
-              if (localStorage.getItem("aimode")) {
-                localStorage.removeItem("aimode")
+              if (searchMode === "llm") {
+                setSearchMode("")
                 toast("Switched to normal mode")
               } else {
-                localStorage.setItem("aimode", "ok")
+                setSearchMode("llm")
                 toast("Switched to AI mode")
               }
             }}

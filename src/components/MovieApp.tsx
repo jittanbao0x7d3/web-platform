@@ -1,10 +1,11 @@
 import Autoplay from "embla-carousel-autoplay"
-import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/Carousel"
 import MovieCard from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
+import { useMovieContext } from "@/contexts/MoviesContext"
 import { useQueryMovie } from "@/lib/hooks/useQueryMovie"
+import { useSearch } from "@/lib/hooks/useSearch"
 import { basePortraitImageUri } from "@/lib/utils/axios.tmdb"
 
 const options = [
@@ -39,8 +40,10 @@ const urlMapper = {
 }
 
 const MovieApp = () => {
-  const router = useRouter()
   const [filter, setFilter] = useState<string>("today")
+  const { searchMode } = useMovieContext()
+
+  const { mutate, isPending } = useSearch()
 
   const query = useQueryMovie({
     key: ["MOVIE_LIST", filter],
@@ -57,14 +60,17 @@ const MovieApp = () => {
     params: {},
   })
 
-  const handleSearch = (query: string) => {
-    router.push(`/search/${query}`)
+  const handleSearch = async (query: string) => {
+    mutate({
+      query,
+      type: searchMode,
+    })
   }
 
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="container mx-auto px-4 py-8">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} isLoading={isPending} />
 
         <div className="my-5 min-h-36 w-full">
           <Carousel

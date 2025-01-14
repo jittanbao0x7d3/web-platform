@@ -1,22 +1,18 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import * as motion from "motion/react-client"
-import { useRouter } from "next/navigation"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
 import { FaSearch } from "react-icons/fa"
+import { ButtonLoading } from "@/components/Button"
 
-export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
+export function SearchBar({ onSearch, isLoading }: { onSearch: (query: string) => Promise<void>; isLoading: boolean }) {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const router = useRouter()
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSearch(searchQuery.trim())
-    setOpen(false)
-
-    router.push("/search/movies")
+    await onSearch(searchQuery.trim())
   }
 
   useEffect(() => {
@@ -78,12 +74,13 @@ export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
 
                 <div className="absolute right-24 top-2 text-white"></div>
 
-                <button
+                <ButtonLoading
+                  isLoading={isLoading}
                   type="submit"
                   className="absolute right-3 top-2 rounded-lg bg-blue-600 px-4 py-1.5 text-white hover:bg-blue-700 focus:outline-none"
                 >
                   Search
-                </button>
+                </ButtonLoading>
               </div>
             </form>
           </motion.div>
