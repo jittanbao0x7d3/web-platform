@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
-import axios from "@/lib/utils/axios"
+import { axiosInstance } from "@/lib/utils/axios"
 
 const ActivationPage: React.FC = () => {
   const [activationStatus, setActivationStatus] = useState<string | null>(null)
@@ -15,7 +15,7 @@ const ActivationPage: React.FC = () => {
       if (token) {
         try {
           // Replace with your actual API endpoint
-          const response = await axios.post(`/auth/activate/${token}`)
+          const response = await axiosInstance.post(`/auth/activate/${token}`)
           console.log(response)
 
           if (response.status === 200) {
