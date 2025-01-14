@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { useParams } from "next/navigation"
-import axios from "@/lib/utils/axios"
+import { axiosInstance } from "@/lib/utils/axios"
 
 const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState("")
@@ -25,7 +25,7 @@ const ResetPasswordPage: React.FC = () => {
 
     try {
       // Replace with your actual API endpoint
-      const response = await axios.post(`/auth/reset-password/${token}`, {
+      const response = await axiosInstance.post(`/auth/reset-password/${token}`, {
         newPassword: password,
       })
 
