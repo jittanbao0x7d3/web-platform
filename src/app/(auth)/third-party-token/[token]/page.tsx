@@ -1,8 +1,8 @@
 "use client"
 
-import { get } from "lodash"
 import { useParams, useRouter } from "next/navigation"
 import React, { useEffect } from "react"
+import { toast } from "sonner"
 
 const ThirdPartyToken = () => {
   const router = useRouter()
@@ -33,13 +33,12 @@ const ThirdPartyToken = () => {
     if (token) {
       if (typeof token === "string") {
         localStorage.setItem("token", token)
-        getDataProfile(token)
-      }
 
-      window.location.href = "/"
+        getDataProfile(token).then(() => (window.location.href = "/"))
+      }
     } else {
       router.push("/login")
-      alert("Invalid token")
+      toast("Invalid token")
     }
   }, [router, token])
 

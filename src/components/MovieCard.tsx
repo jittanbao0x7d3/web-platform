@@ -6,7 +6,7 @@ import { useMovieContext } from "@/contexts/MoviesContext"
 import { baseImageUri } from "@/lib/utils/axios.tmdb"
 
 const MovieCard = ({ movie, path }: any) => {
-  const { addMovieHistoryId, addMovieId } = useMovieContext()
+  const { addMovieHistoryId } = useMovieContext()
   const router = useRouter()
 
   const handleAddMovie = async (path: string) => {
@@ -21,8 +21,10 @@ const MovieCard = ({ movie, path }: any) => {
         },
         body: JSON.stringify({ userId, movieId: path }),
       })
+
       const data = await response.json()
 
+      // @ts-ignore
       if (data.movieIds) {
         toast("Movie added to favorites")
       } else {

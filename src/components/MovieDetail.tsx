@@ -3,6 +3,7 @@ import { join } from "lodash"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { FaArrowLeft, FaCalendarAlt, FaStar } from "react-icons/fa"
+import { toast } from "sonner"
 import { useQueryMovie } from "@/lib/hooks/useQueryMovie"
 import { baseLandScapeImageUri } from "@/lib/utils/axios.tmdb"
 
@@ -26,7 +27,7 @@ export function MovieDetail({ movie, similar }) {
       const resp: any = await response.json()
       setReviews(resp)
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
@@ -46,7 +47,7 @@ export function MovieDetail({ movie, similar }) {
       setAverageRating(average)
       setTotalVotes(resp.length)
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
@@ -59,12 +60,12 @@ export function MovieDetail({ movie, similar }) {
     e.preventDefault()
 
     if (!localStorage.getItem("token")) {
-      alert("Please login to leave a review.")
+      toast("Please login to leave a review.")
       return
     }
 
     if (!reviewText) {
-      alert("Please enter your review.")
+      toast("Please enter your review.")
       return
     }
 
@@ -86,20 +87,20 @@ export function MovieDetail({ movie, similar }) {
 
       const resp: any = await response.json()
       if (resp.status === "error") {
-        alert(resp.message)
+        toast(resp.message)
         return
       }
 
       await fetchReviews()
       setReviewText("")
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
   const handleRatingSubmit = async (e) => {
     if (!localStorage.getItem("token")) {
-      alert("Please login to leave a review.")
+      toast("Please login to leave a review.")
       return
     }
     e.preventDefault()
@@ -121,13 +122,13 @@ export function MovieDetail({ movie, similar }) {
 
       const resp: any = await response.json()
       if (resp.status === "error") {
-        alert(resp.message)
+        toast(resp.message)
         return
       }
 
-      alert("Rating submitted successfully!")
+      toast("Rating submitted successfully!")
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 

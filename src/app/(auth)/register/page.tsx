@@ -4,6 +4,7 @@ import * as Form from "@radix-ui/react-form"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as React from "react"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const registerSchema = z.object({
@@ -32,17 +33,17 @@ const RegisterPage = () => {
 
       const resp: any = await response.json()
       if (resp.status === "error") {
-        alert(resp.message)
+        toast(resp.message)
         return
       }
 
       if (resp.status === "success") {
-        alert("Register successful! Check your email to verify your account.")
+        toast("Register successful! Check your email to verify your account.")
 
         router.push("/login")
       }
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
@@ -55,7 +56,7 @@ const RegisterPage = () => {
     if (result.success) {
       handleSubmit(result.data)
     } else {
-      alert("Validation errors:\n" + result.error.errors.map((err) => `${err.path[0]}: ${err.message}`).join("\n"))
+      toast("Validation errors:\n" + result.error.errors.map((err) => `${err.path[0]}: ${err.message}`).join("\n"))
     }
   }
 

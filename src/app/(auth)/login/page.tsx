@@ -4,6 +4,7 @@ import * as Form from "@radix-ui/react-form"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as React from "react"
+import { toast } from "sonner"
 import { z } from "zod"
 import GoogleLogo from "@/assets/googleLogo"
 
@@ -19,7 +20,7 @@ const LoginPage = () => {
     try {
       window.location.href = process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/google"
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
@@ -36,19 +37,19 @@ const LoginPage = () => {
 
       const resp: any = await response.json()
       if (resp.status === "error") {
-        alert(resp.message)
+        toast(resp.message)
         return
       }
 
       // Redirect or perform further actions
-      alert("Login successful!")
+      toast("Login successful!")
       localStorage.setItem("token", resp.access_token)
       localStorage.setItem("userId", resp.user._id)
       localStorage.setItem("email", resp.user.email)
       localStorage.setItem("name", resp.user.firstName + " " + resp.user.lastName)
       window.location.href = "/"
     } catch (err: any) {
-      alert(err.message || "Something went wrong.")
+      toast(err.message || "Something went wrong.")
     }
   }
 
